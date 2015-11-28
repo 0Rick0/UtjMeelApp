@@ -50,7 +50,10 @@ public class Communication {
     private boolean loggedIn;
 
     private String lastError;
-
+    /**
+     * try to load the info to a local file
+     * @param context the context in which to load the file
+     */
     public boolean tryLoadInfo(Context context){
 
         File file = new File(context.getFilesDir(), filename);
@@ -95,9 +98,14 @@ public class Communication {
             loggedIn = false;
             return false;
         }
+        isLoggedIn();
         return true;
     }
 
+    /**
+     * try to save the info to a local file
+     * @param context the context in which to save the file
+     */
     public boolean trySaveInfo(Context context){
         File file = new File(context.getFilesDir(), filename);
 
@@ -112,8 +120,8 @@ public class Communication {
         JSONObject obj = new JSONObject();
         try {
             obj.put("username",username);
-            obj.put("token",token);
-            obj.put("loggedIn",loggedIn);
+            obj.put("token", token);
+            obj.put("loggedIn", loggedIn);
             obj.put("expirationDate", expirationDate.toString());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -136,11 +144,22 @@ public class Communication {
         return true;
     }
 
+    /**
+     * get the last occurred error details
+     * @return the error
+     */
     public String getLastError(){
         return lastError;
     }
 
+    /**
+     * Check if the user is logged in to the server
+     * @return true if the user is logged in
+     */
     public boolean isLoggedIn(){
+        if(expirationDate.after(new Date())){
+            loggedIn = false;
+        }
         return loggedIn;
     }
 
@@ -153,9 +172,9 @@ public class Communication {
     public boolean login(String username, String password){
         String addr = WEB_ADDR + "login.php";
         Map<String,String> data = new HashMap<>();
-        data.put("username",username);
-        data.put("password",password);
-        JSONObject result = doPostRequest(addr,data);
+        data.put("username", username);
+        data.put("password", password);
+        JSONObject result = doPostRequest(addr, data);
         try {
             int error = result.getInt("error");
             if(error!=0){
@@ -164,7 +183,7 @@ public class Communication {
             this.username = result.getString("username");
             this.token = result.getString("session_id");
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-            this.expirationDate = format.parse(result.getString("expiration_date-date"));
+            this.expirationDate = format.parse(result.getString("expiration_date"));
         } catch (JSONException e) {
             e.printStackTrace();
             lastError = "JSON read error";
@@ -178,6 +197,87 @@ public class Communication {
         return true;
     }
 
+    /**
+     * Refresh the authorisation token
+     * @return if the renew was successful
+     */
+    public boolean refreshToken(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(WEB_ADDR);
+        sb.append("renew.php");
+        sb.append("?username=").append(username);
+        sb.append("&token=").append(token);
+        JSONObject result = doGetRequest(sb.toString());
+        try {
+            if(result.getInt("error")!=0){
+                lastError = result.getString("error_text");
+                return false;
+            }
+            username = result.getString("username");
+            token = result.getString("session_id");
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            this.expirationDate = format.parse(result.getString("expiration_date"));
+        } catch (JSONException e) {
+            lastError = "JSON exception";
+            e.printStackTrace();
+            return false;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            lastError = "Date time parser exception";
+            return false;
+        }
+        return true;
+    }
+
+    public boolean changePassword(String username, String curpass, String newPass, String newPassRepear){
+        Map<String,String> vars = new HashMap<>();
+        vars.put("username", username);
+        vars.put("currentPassword", curpass);
+        vars.put("newPassword", newPass);
+        vars.put("newPasswordRepeat", newPassRepear);
+        JSONObject result = doPostRequest(WEB_ADDR + "changePassword.php", vars);
+        try {
+            if(result.getInt("error")!=0){
+                lastError = result.getString("error_text");
+                return false;
+            }
+            this.loggedIn=false;
+            this.token=null;
+            this.expirationDate=null;
+            this.username=null;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            lastError = "JSON exception";
+            return false;
+        }
+        return true;
+    }
+
+    public boolean createAccount(String username, String password, String passwordRepeat, String email){
+        Map<String,String> vars = new HashMap<>();
+        vars.put("username",username);
+        vars.put("password",password);
+        vars.put("passwordRepeat",passwordRepeat);
+        vars.put("email",email);
+        JSONObject result = doPostRequest(WEB_ADDR + "createAccount.php",vars);
+        try {
+            if(result.getInt("error")!=0){
+                lastError = result.getString("error_text");
+                return false;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            lastError = "JSON exception";
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Do an http GET request to an given address
+     * @param addr the address to request to
+     * @return the result as an JSON object
+     */
     private JSONObject doGetRequest(String addr){
         HttpURLConnection c = null;
         try {
@@ -225,6 +325,12 @@ public class Communication {
         return ret;
     }
 
+    /**
+     * Do an http POST request to an given address
+     * @param addr the address to request to
+     * @param vars key value pair of the information in the body
+     * @return the result as an JSON object
+     */
     private JSONObject doPostRequest(String addr, Map<String,String> vars){
         HttpURLConnection c = null;
         try {

@@ -7,6 +7,7 @@ import java.util.List;
  * Created by Rick on 28-11-2015.
  */
 public class Transactions {
+    private int error;
     private int offset;
     private int amount;
     private List<Transaction> transactions;

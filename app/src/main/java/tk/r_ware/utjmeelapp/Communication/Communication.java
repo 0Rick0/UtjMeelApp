@@ -2,6 +2,8 @@ package tk.r_ware.utjmeelapp.Communication;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,6 +28,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import tk.r_ware.utjmeelapp.Communication.containers.Info;
+import tk.r_ware.utjmeelapp.Communication.containers.Statistics;
+import tk.r_ware.utjmeelapp.Communication.containers.Transactions;
 
 /**
  * Created by Rick on 17-11-2015.
@@ -255,11 +261,11 @@ public class Communication {
 
     public boolean createAccount(String username, String password, String passwordRepeat, String email){
         Map<String,String> vars = new HashMap<>();
-        vars.put("username",username);
-        vars.put("password",password);
-        vars.put("passwordRepeat",passwordRepeat);
-        vars.put("email",email);
-        JSONObject result = doPostRequest(WEB_ADDR + "createAccount.php",vars);
+        vars.put("username", username);
+        vars.put("password", password);
+        vars.put("passwordRepeat", passwordRepeat);
+        vars.put("email", email);
+        JSONObject result = doPostRequest(WEB_ADDR + "createAccount.php", vars);
         try {
             if(result.getInt("error")!=0){
                 lastError = result.getString("error_text");
@@ -271,6 +277,158 @@ public class Communication {
             return false;
         }
         return true;
+    }
+
+    public Info info(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(WEB_ADDR);
+        sb.append("info.php?username=").append(username);
+        sb.append("&session_id=").append(token);
+        JSONObject obj = doGetRequest(sb.toString());
+        try {
+            if(obj.getInt("error")!=0){
+                lastError = obj.getString("error_text");
+                return null;
+            }
+
+            Gson gson = new Gson();
+            return gson.fromJson(obj.toString(),Info.class);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            lastError = "Error while parsing JSON";
+            return null;
+        }
+    }
+
+    public Statistics statistics(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(WEB_ADDR);
+        sb.append("renew.php");
+        sb.append("?username=").append(username);
+        sb.append("&token=").append(token);
+        return statistics(sb.toString());
+    }
+
+    public Statistics statistics(String begin, String end){
+        StringBuilder sb = new StringBuilder();
+        sb.append(WEB_ADDR);
+        sb.append("renew.php");
+        sb.append("?username=").append(username);
+        sb.append("&token=").append(token);
+        sb.append("&begin=").append(begin);
+        sb.append("&end=").append(end);
+        return statistics(sb.toString());
+    }
+
+    private Statistics statistics(String url){
+        JSONObject obj = doGetRequest(url);
+        try {
+            if(obj.getInt("error")!=0){
+                lastError = obj.getString("error_text");
+                return null;
+            }
+
+            Gson gson = new Gson();
+            return gson.fromJson(obj.toString(),Statistics.class);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            lastError = "Error while parsing JSON";
+            return null;
+        }
+    }
+
+    public Transactions transactions(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(WEB_ADDR);
+        sb.append("transactions.php?username=").append(username);
+        sb.append("&session_id=").append(token);
+        return transactions(sb.toString());
+    }
+
+    public Transactions transactions(int offset, int amount){
+        StringBuilder sb = new StringBuilder();
+        sb.append(WEB_ADDR);
+        sb.append("transactions.php?username=").append(username);
+        sb.append("&session_id=").append(token);
+        sb.append("&offset=").append(offset);
+        sb.append("&amount=").append(amount);
+        return transactions(sb.toString());
+    }
+
+    private Transactions transactions(String url){
+        JSONObject obj = doGetRequest(url);
+        try {
+            if(obj.getInt("error")!=0){
+                lastError=obj.getString("error_text");
+                return null;
+            }
+            Gson gson = new Gson();
+            return gson.fromJson(obj.toString(),Transactions.class);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            lastError = "Error while parsing JSON";
+            return null;
+        }
+    }
+
+    private StringBuilder transferBase(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(WEB_ADDR);
+        sb.append("transfer.php?username=").append(username);
+        sb.append("&session_id=").append(token);
+        return sb;
+    }
+
+    public boolean transfer(String itemName, int amount, String description){
+        StringBuilder sb = transferBase();
+        sb.append("&itemName=").append(itemName);
+        sb.append("&amount=").append(amount);
+        sb.append("&description=").append(description);
+        return transfer(sb.toString());
+    }
+
+    public boolean transfer(String itemName, int amount,String sourceName, String description){
+        StringBuilder sb = transferBase();
+        sb.append("&itemName=").append(itemName);
+        sb.append("&amount=").append(amount);
+        sb.append("&sourceName=").append(sourceName);
+        sb.append("&description=").append(description);
+        return transfer(sb.toString());
+    }
+
+    public boolean transferT(String itemName, int amount,String targetName, String description){
+        StringBuilder sb = transferBase();
+        sb.append("&itemName=").append(itemName);
+        sb.append("&amount=").append(amount);
+        sb.append("&targetName=").append(targetName);
+        sb.append("&description=").append(description);
+        return transfer(sb.toString());
+    }
+
+    public boolean transfer(String itemName, int amount,String sourceName,String targetName, String description){
+        StringBuilder sb = transferBase();
+        sb.append("&itemName=").append(itemName);
+        sb.append("&amount=").append(amount);
+        sb.append("&sourcename=").append(sourceName);
+        sb.append("&targetName=").append(targetName);
+        sb.append("&description=").append(description);
+        return transfer(sb.toString());
+    }
+
+    private boolean transfer(String url){
+        JSONObject obj = doGetRequest(url);
+        try {
+            if(obj.getInt("error")!=0){
+                lastError = obj.getString("error_text");
+                return false;
+            }
+            return true;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            lastError = "Error while parsing JSON";
+            return false;
+        }
     }
 
     /**

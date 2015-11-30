@@ -6,6 +6,7 @@ import java.util.List;
  * Created by Rick on 28-11-2015.
  */
 public class Info {
+    private int error;
     private List<InfoItem> items;
     private List<Notification> notifications;
     private double balance;

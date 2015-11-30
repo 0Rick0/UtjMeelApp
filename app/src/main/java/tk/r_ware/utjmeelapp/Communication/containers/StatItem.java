@@ -7,6 +7,7 @@ public class StatItem {
     private int id;
     private String name;
     private int amount;
+    private double price;
     private Double payed;
 
     public int getId() {
@@ -19,6 +20,10 @@ public class StatItem {
 
     public int getAmount() {
         return amount;
+    }
+
+    public Double getPrice() {
+        return price;
     }
 
     public Double getPayed() {

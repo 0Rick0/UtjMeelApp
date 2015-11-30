@@ -8,6 +8,7 @@ import java.util.List;
  * Created by Rick on 28-11-2015.
  */
 public class Statistics {
+    private int error;
     private Date begin;
     private Date end;
     private List<StatItem> items;

@@ -1,6 +1,7 @@
 package tk.r_ware.utjmeelapp.Communication;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -42,11 +43,17 @@ public class Communication {
 
     //singleton
     private static Communication instance;
-    public Communication getInstance(){
+    public static Communication getInstance(){
         if(instance == null){
+            Log.i("Communication","Creating new instance");
             instance = new Communication();
         }
         return instance;
+    }
+
+    static String convertStreamToString(java.io.InputStream is) {
+        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
     }
 
     //store login info
@@ -68,21 +75,25 @@ public class Communication {
         String text;
         try {
             InputStream is = new FileInputStream(file);
-            int size = is.available();
+//            int size = is.available();
+//
+//
+//            byte[] buffer = new byte[size];
+//
+//            is.read(buffer);
+//
+//            is.close();
+//
+//            text = new String(buffer, "UTF-8");
+//
+            text = convertStreamToString(is);
 
-            byte[] buffer = new byte[size];
-
-            is.read(buffer);
-
-            is.close();
-
-            text = new String(buffer, "UTF-8");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return false;
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return false;
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//            return false;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -356,15 +367,15 @@ public class Communication {
         return transactions(sb.toString());
     }
 
-    private Transactions transactions(String url){
+    private Transactions transactions(String url) {
         JSONObject obj = doGetRequest(url);
         try {
-            if(obj.getInt("error")!=0){
-                lastError=obj.getString("error_text");
+            if (obj.getInt("error") != 0) {
+                lastError = obj.getString("error_text");
                 return null;
             }
             Gson gson = new Gson();
-            return gson.fromJson(obj.toString(),Transactions.class);
+            return gson.fromJson(obj.toString(), Transactions.class);
         } catch (JSONException e) {
             e.printStackTrace();
             lastError = "Error while parsing JSON";
@@ -372,52 +383,46 @@ public class Communication {
         }
     }
 
-    private StringBuilder transferBase(){
-        StringBuilder sb = new StringBuilder();
-        sb.append(WEB_ADDR);
-        sb.append("transfer.php?username=").append(username);
-        sb.append("&session_id=").append(token);
-        return sb;
-    }
-
     public boolean transfer(String itemName, int amount, String description){
-        StringBuilder sb = transferBase();
-        sb.append("&itemName=").append(itemName);
-        sb.append("&amount=").append(amount);
-        sb.append("&description=").append(description);
-        return transfer(sb.toString());
+        Map<String,String> vars = new HashMap<>();
+        vars.put("amount", amount + "");
+        vars.put("itemName", itemName);
+        vars.put("description", description);
+        return transfer(vars);
     }
 
     public boolean transfer(String itemName, int amount,String sourceName, String description){
-        StringBuilder sb = transferBase();
-        sb.append("&itemName=").append(itemName);
-        sb.append("&amount=").append(amount);
-        sb.append("&sourceName=").append(sourceName);
-        sb.append("&description=").append(description);
-        return transfer(sb.toString());
+        Map<String,String> vars = new HashMap<>();
+        vars.put("amount", amount + "");
+        vars.put("itemName", itemName);
+        vars.put("sourceName", sourceName);
+        vars.put("description", description);
+        return transfer(vars);
     }
 
     public boolean transferT(String itemName, int amount,String targetName, String description){
-        StringBuilder sb = transferBase();
-        sb.append("&itemName=").append(itemName);
-        sb.append("&amount=").append(amount);
-        sb.append("&targetName=").append(targetName);
-        sb.append("&description=").append(description);
-        return transfer(sb.toString());
+        Map<String,String> vars = new HashMap<>();
+        vars.put("amount", amount + "");
+        vars.put("itemName", itemName);
+        vars.put("targetName", targetName);
+        vars.put("description", description);
+        return transfer(vars);
     }
 
     public boolean transfer(String itemName, int amount,String sourceName,String targetName, String description){
-        StringBuilder sb = transferBase();
-        sb.append("&itemName=").append(itemName);
-        sb.append("&amount=").append(amount);
-        sb.append("&sourcename=").append(sourceName);
-        sb.append("&targetName=").append(targetName);
-        sb.append("&description=").append(description);
-        return transfer(sb.toString());
+        Map<String,String> vars = new HashMap<>();
+        vars.put("amount", amount + "");
+        vars.put("itemName", itemName);
+        vars.put("sourceName", sourceName);
+        vars.put("targetName", targetName);
+        vars.put("description", description);
+        return transfer(vars);
     }
 
-    private boolean transfer(String url){
-        JSONObject obj = doGetRequest(url);
+    private boolean transfer(Map<String,String> vars){
+        vars.put("username",username);
+        vars.put("session_id",token);
+        JSONObject obj = doPostRequest("transfer.php",vars);
         try {
             if(obj.getInt("error")!=0){
                 lastError = obj.getString("error_text");

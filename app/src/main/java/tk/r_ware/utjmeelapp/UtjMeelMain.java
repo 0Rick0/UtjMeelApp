@@ -1,6 +1,7 @@
 package tk.r_ware.utjmeelapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,6 +19,8 @@ import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import tk.r_ware.utjmeelapp.Communication.Communication;
 
 public class UtjMeelMain extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -31,9 +35,23 @@ public class UtjMeelMain extends AppCompatActivity
      */
     private CharSequence mTitle;
 
+    private void checkLogin(){
+
+        if(Communication.getInstance().tryLoadInfo(getApplicationContext()) && Communication.getInstance().isLoggedIn()){
+           return;
+        }
+        Log.i("MAIN","Can't login");
+        //goto login activity
+        //Intent i = new Intent(UtjMeelMain.this,UtjMeelMain.class);//todo replace  UtjMeelMain.class with Login.class
+        //startActivity(i);//todo uncomment because of loop
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        checkLogin();
+
         setContentView(R.layout.activity_utj_meel_main);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -58,13 +76,10 @@ public class UtjMeelMain extends AppCompatActivity
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
-                mTitle = getString(R.string.title_section1);
+                mTitle = getString(R.string.title_main);
                 break;
             case 2:
-                mTitle = getString(R.string.title_section2);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_section3);
+                mTitle = getString(R.string.title_transactions);
                 break;
         }
     }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">UtjMeelApp</string>
+    <string name="app_name">UtjMeel</string>
 
     <string name="title_main">Betalen</string>
     <string name="title_transactions">Transacties</string>
@@ -10,4 +10,18 @@
     <string name="action_example">Example action</string>
 
     <string name="action_settings">Settings</string>
+    <string name="title_activity_login">Login</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Gebruikersnaam</string>
+    <string name="prompt_password">Wachtwoord</string>
+    <string name="action_sign_in">Login of registreer</string>
+    <string name="action_sign_in_short">Login</string>
+    <string name="error_invalid_email">Foute gebruikersnaam</string>
+    <string name="error_invalid_password">Wachtwoord te kort</string>
+    <string name="error_incorrect_password">Fout wachtwoordt</string>
+    <string name="error_field_required">Dit veld is verplicht</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
 </resources>

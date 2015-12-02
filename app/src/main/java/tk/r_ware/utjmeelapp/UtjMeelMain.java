@@ -36,14 +36,38 @@ public class UtjMeelMain extends AppCompatActivity
     private CharSequence mTitle;
 
     private void checkLogin(){
-
-        if(Communication.getInstance().tryLoadInfo(getApplicationContext()) && Communication.getInstance().isLoggedIn()){
+        Boolean load = Communication.getInstance().tryLoadInfo(getApplicationContext());
+        Boolean login = Communication.getInstance().isLoggedIn();
+        if(load && login){
            return;
         }
-        Log.i("MAIN","Can't login");
+        Log.i("MAIN","Can't login" + load + " " + login);
         //goto login activity
-        //Intent i = new Intent(UtjMeelMain.this,UtjMeelMain.class);//todo replace  UtjMeelMain.class with Login.class
-        //startActivity(i);//todo uncomment because of loop
+        Intent i = new Intent(UtjMeelMain.this,Login.class);
+        startActivity(i);
+        finish();
+    }
+
+    @Override
+    protected void onResume(){
+        if(!Communication.getInstance().isLoggedIn()){
+            Log.i("MAIN","Resume Can't login");
+            Intent i = new Intent(UtjMeelMain.this,Login.class);
+            startActivity(i);
+            finish();
+        }
+        super.onResume();
+    }
+
+    @Override
+    protected void onRestart(){
+        if(!Communication.getInstance().isLoggedIn()){
+            Log.i("MAIN","Restart Can't login");
+            Intent i = new Intent(UtjMeelMain.this,Login.class);
+            startActivity(i);
+            finish();
+        }
+        super.onRestart();
     }
 
     @Override

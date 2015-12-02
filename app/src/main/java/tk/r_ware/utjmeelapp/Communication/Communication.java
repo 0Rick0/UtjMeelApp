@@ -38,14 +38,13 @@ import tk.r_ware.utjmeelapp.Communication.containers.Transactions;
  * Created by Rick on 17-11-2015.
  */
 public class Communication {
-    private static final String WEB_ADDR = "http://RICK-PC/";
+    private static final String WEB_ADDR = "http://192.168.0.107/UtjMeel/";
     private static final String filename = "config.json";
 
     //singleton
     private static Communication instance;
     public static Communication getInstance(){
         if(instance == null){
-            Log.i("Communication","Creating new instance");
             instance = new Communication();
         }
         return instance;
@@ -75,36 +74,19 @@ public class Communication {
         String text;
         try {
             InputStream is = new FileInputStream(file);
-//            int size = is.available();
-//
-//
-//            byte[] buffer = new byte[size];
-//
-//            is.read(buffer);
-//
-//            is.close();
-//
-//            text = new String(buffer, "UTF-8");
-//
+
             text = convertStreamToString(is);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return false;
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//            return false;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
         }
-
         try {
             JSONObject obj = new JSONObject(text);
             username = obj.getString("username");
             token = obj.getString("token");
             loggedIn = obj.getBoolean("loggedIn");
-            DateFormat format = SimpleDateFormat.getDateInstance();
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd",Locale.US);;
             expirationDate = format.parse(obj.getString("expirationDate"));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -139,7 +121,9 @@ public class Communication {
             obj.put("username",username);
             obj.put("token", token);
             obj.put("loggedIn", loggedIn);
-            obj.put("expirationDate", expirationDate.toString());
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd",Locale.US);
+
+            obj.put("expirationDate", format.format(expirationDate));
         } catch (JSONException e) {
             e.printStackTrace();
             return false;
@@ -174,7 +158,7 @@ public class Communication {
      * @return true if the user is logged in
      */
     public boolean isLoggedIn(){
-        if(expirationDate.after(new Date())){
+        if(expirationDate.before(new Date())){//expiration date before now (now is after the expiration date)
             loggedIn = false;
         }
         return loggedIn;
@@ -201,6 +185,7 @@ public class Communication {
             this.token = result.getString("session_id");
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             this.expirationDate = format.parse(result.getString("expiration_date"));
+            this.loggedIn = true;
         } catch (JSONException e) {
             e.printStackTrace();
             lastError = "JSON read error";
@@ -210,7 +195,7 @@ public class Communication {
             lastError = "Date parse error";
             return false;
         }
-        //todo save config?
+
         return true;
     }
 
@@ -496,12 +481,12 @@ public class Communication {
      */
     private JSONObject doPostRequest(String addr, Map<String,String> vars){
         HttpURLConnection c = null;
+
         try {
             URL u = new URL(addr);
             c = (HttpURLConnection) u.openConnection();
             c.setRequestMethod("POST");
-            c.setRequestProperty("Content-length", "0");
-            c.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+            c.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             c.setUseCaches(false);
             c.setAllowUserInteraction(false);
             c.setDoInput(true);
@@ -509,8 +494,6 @@ public class Communication {
             c.setConnectTimeout(10000);
             c.setReadTimeout(10000);
 
-            OutputStream os = c.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os,"UTF-8"));
             StringBuilder vb = new StringBuilder();
             int i = 0;
             //build an query string
@@ -521,9 +504,13 @@ public class Communication {
                     vb.append("&");
                 }
             }
-            writer.write(vb.toString());
 
-            c.connect();
+            OutputStream os = c.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os,"UTF-8"));
+
+            writer.write(vb.toString());
+            writer.flush();
+
             int status = c.getResponseCode();
 
             switch (status) {

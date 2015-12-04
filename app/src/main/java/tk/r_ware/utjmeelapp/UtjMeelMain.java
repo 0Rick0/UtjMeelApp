@@ -98,16 +98,20 @@ public class UtjMeelMain extends AppCompatActivity
     }
 
     public void onSectionAttached(int number) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
         switch (number) {
             case 1:
                 mTitle = getString(R.string.title_main);
-                FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, PayFragment.newInstance())
                         .commit();
                 break;
             case 2:
                 mTitle = getString(R.string.title_transactions);
+
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, TransactionsFragment.newInstance(1))
+                        .commit();
                 break;
         }
     }

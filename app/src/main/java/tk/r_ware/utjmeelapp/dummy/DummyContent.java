@@ -1,10 +1,14 @@
 package tk.r_ware.utjmeelapp.dummy;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import tk.r_ware.utjmeelapp.Communication.containers.Transaction;
 import tk.r_ware.utjmeelapp.TransactionsFragment;
 
 /**
@@ -18,12 +22,7 @@ public class DummyContent implements TransactionsFragment.OnListFragmentInteract
     /**
      * An array of sample (dummy) items.
      */
-    public static final List<DummyItem> ITEMS = new ArrayList<DummyItem>();
-
-    /**
-     * A map of sample (dummy) items, by ID.
-     */
-    public static final Map<String, DummyItem> ITEM_MAP = new HashMap<String, DummyItem>();
+    public static final List<Transaction> ITEMS = new ArrayList<>();
 
     private static final int COUNT = 25;
 
@@ -34,46 +33,30 @@ public class DummyContent implements TransactionsFragment.OnListFragmentInteract
         }
     }
 
-    private static void addItem(DummyItem item) {
+    private static void addItem(Transaction item) {
+
+
         ITEMS.add(item);
-        ITEM_MAP.put(item.id, item);
     }
 
-    private static DummyItem createDummyItem(int position) {
-        return new DummyItem(String.valueOf(position), "Item " + position, makeDetails(position));
-    }
-
-    private static String makeDetails(int position) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Details about Item: ").append(position);
-        for (int i = 0; i < position; i++) {
-            builder.append("\nMore details information here.");
-        }
-        return builder.toString();
+    private static Transaction createDummyItem(int position) {
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd HH:mm:ss")//todo inportant define date time format for gson deserialize
+                .create();
+        return gson.fromJson("{\n" +
+                "\t\"id\":0,\n" +
+                "\t\"sourceName\":\"source\",\n" +
+                "\t\"targetName\":\"target\",\n" +
+                "\t\"amount\":0.5,\n" +
+                "\t\"date\":\"2015-12-04 12:00:00\",\n" +
+                "\t\"itemName\":\"Munt\",\n" +
+                "\t\"itemCount\":1,\n" +
+                "\t\"description\":\"N/A\"\n" +
+                "}",Transaction.class);
     }
 
     @Override
-    public void onListFragmentInteraction(DummyItem item) {
+    public void onListFragmentInteraction(Transaction item) {
 
-    }
-
-    /**
-     * A dummy item representing a piece of content.
-     */
-    public static class DummyItem {
-        public final String id;
-        public final String content;
-        public final String details;
-
-        public DummyItem(String id, String content, String details) {
-            this.id = id;
-            this.content = content;
-            this.details = details;
-        }
-
-        @Override
-        public String toString() {
-            return content;
-        }
     }
 }

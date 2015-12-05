@@ -10,8 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import tk.r_ware.utjmeelapp.Communication.containers.Transaction;
 import tk.r_ware.utjmeelapp.dummy.DummyContent;
-import tk.r_ware.utjmeelapp.dummy.DummyContent.DummyItem;
 
 import java.util.List;
 
@@ -104,6 +104,6 @@ public class TransactionsFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Transaction item);
     }
 }

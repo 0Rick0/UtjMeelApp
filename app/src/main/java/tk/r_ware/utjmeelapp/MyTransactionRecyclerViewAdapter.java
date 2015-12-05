@@ -6,9 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import tk.r_ware.utjmeelapp.Communication.containers.Transaction;
 import tk.r_ware.utjmeelapp.TransactionsFragment.OnListFragmentInteractionListener;
-import tk.r_ware.utjmeelapp.dummy.DummyContent.DummyItem;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -18,10 +19,11 @@ import java.util.List;
  */
 public class MyTransactionRecyclerViewAdapter extends RecyclerView.Adapter<MyTransactionRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<Transaction> mValues;
     private final OnListFragmentInteractionListener mListener;
+    private static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-    public MyTransactionRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public MyTransactionRecyclerViewAdapter(List<Transaction> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -35,9 +37,11 @@ public class MyTransactionRecyclerViewAdapter extends RecyclerView.Adapter<MyTra
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        Transaction item = mValues.get(position);
+        holder.mItem = item;
+        holder.mShortView.setText(item.getItemCount() + " x " + item.getItemName() + " van/naar " + item.getSourceName()+"/"+item.getTargetName());
+        holder.mDescriptionView.setText("Op " + format.format(item.getDate()) + " " + item.getDescription());
+        holder.mPriceView.setText(item.getAmount() + "©");
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,20 +62,22 @@ public class MyTransactionRecyclerViewAdapter extends RecyclerView.Adapter<MyTra
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+        public final TextView mShortView;
+        public final TextView mDescriptionView;
+        public final TextView mPriceView;
+        public Transaction mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mShortView = (TextView) view.findViewById(R.id.transactionShort);
+            mDescriptionView = (TextView) view.findViewById(R.id.transactionDescription);
+            mPriceView = (TextView) view.findViewById(R.id.transactionPrice);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mShortView.getText() + "'";
         }
     }
 }

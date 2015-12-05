@@ -11,7 +11,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/id"
+            android:id="@+id/transactionShort"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
@@ -26,17 +26,17 @@
             />
 
         <TextView
+            android:id="@+id/transactionPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Item Price"
-            android:id="@+id/tvDescription"
             android:textColor="#ffffff"
             android:layout_gravity="right"
             android:textStyle="bold" />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/content"
+        android:id="@+id/transactionDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?attr/textAppearanceListItem"

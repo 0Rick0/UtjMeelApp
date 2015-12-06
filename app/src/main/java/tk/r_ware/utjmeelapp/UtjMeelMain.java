@@ -2,6 +2,7 @@ package tk.r_ware.utjmeelapp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import tk.r_ware.utjmeelapp.Communication.Communication;
+import tk.r_ware.utjmeelapp.Communication.containers.Info;
 
 public class UtjMeelMain extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {

@@ -38,7 +38,7 @@ import tk.r_ware.utjmeelapp.Communication.containers.Transactions;
  * Created by Rick on 17-11-2015.
  */
 public class Communication {
-    private static final String WEB_ADDR = "http://192.168.0.107/UtjMeel/";
+    private static final String WEB_ADDR = "http://192.168.0.106/UtjMeel/";
     private static final String filename = "config.json";
 
     //singleton

@@ -25,6 +25,11 @@
         completions."
     </string>
 
+    <string name="transaction_short_text_from">%1$d x %2$s van %3$s</string>
+    <string name="transaction_short_text_to">%1$d x %2$s naar %3$s</string>
+    <string name="transaction_description_text">Op %1$s %2$s</string>
+    <string name="transaction_price_text">%1$.2f ©</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

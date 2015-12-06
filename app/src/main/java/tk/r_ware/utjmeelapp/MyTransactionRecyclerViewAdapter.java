@@ -1,5 +1,7 @@
 package tk.r_ware.utjmeelapp;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +13,10 @@ import tk.r_ware.utjmeelapp.TransactionsFragment.OnListFragmentInteractionListen
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link Transaction} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
@@ -21,11 +24,13 @@ public class MyTransactionRecyclerViewAdapter extends RecyclerView.Adapter<MyTra
 
     private final List<Transaction> mValues;
     private final OnListFragmentInteractionListener mListener;
-    private static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US);
+    private final Context context;
 
-    public MyTransactionRecyclerViewAdapter(List<Transaction> items, OnListFragmentInteractionListener listener) {
+    public MyTransactionRecyclerViewAdapter(List<Transaction> items, OnListFragmentInteractionListener listener, Context context) {
         mValues = items;
         mListener = listener;
+        this.context = context;
     }
 
     @Override
@@ -38,10 +43,11 @@ public class MyTransactionRecyclerViewAdapter extends RecyclerView.Adapter<MyTra
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Transaction item = mValues.get(position);
+
         holder.mItem = item;
-        holder.mShortView.setText(item.getItemCount() + " x " + item.getItemName() + " van/naar " + item.getSourceName()+"/"+item.getTargetName());
-        holder.mDescriptionView.setText("Op " + format.format(item.getDate()) + " " + item.getDescription());
-        holder.mPriceView.setText(item.getAmount() + "©");
+        holder.mShortView.setText(String.format(context.getString(R.string.transaction_short_text_from),item.getItemCount(),item.getItemName(),item.getSourceName()));
+        holder.mDescriptionView.setText(String.format(context.getString(R.string.transaction_description_text),format.format(item.getDate()),item.getDescription()));
+        holder.mPriceView.setText(String.format(context.getString(R.string.transaction_price_text),item.getAmount()));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

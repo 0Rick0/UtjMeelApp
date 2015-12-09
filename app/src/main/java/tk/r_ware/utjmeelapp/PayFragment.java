@@ -1,6 +1,7 @@
 package tk.r_ware.utjmeelapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,7 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import tk.r_ware.utjmeelapp.Communication.Communication;
 import tk.r_ware.utjmeelapp.Communication.containers.Info;
@@ -46,13 +49,25 @@ public class PayFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         new infoRetriever().execute();
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pay, container, false);
+
+        View v = inflater.inflate(R.layout.fragment_pay, container, false);
+
+        Button b1 = (Button)v.findViewById(R.id.btPay1);
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getView().getContext(),Transfer.class);
+                startActivity(i);
+            }
+        });
+        return v;
     }
 
     @Override
@@ -75,7 +90,12 @@ public class PayFragment extends Fragment {
         @Override
         protected void onPostExecute(Info result){
             info = result;
-            ((TextView)getView().findViewById(R.id.tvCoins)).setText(result.getBalance() + "©");
+            if(info == null){
+                ((TextView) getView().findViewById(R.id.tvCoins)).setText("Error");
+                Toast.makeText(getView().getContext(),Communication.getInstance().getLastError(),Toast.LENGTH_LONG).show();
+            }else {
+                ((TextView) getView().findViewById(R.id.tvCoins)).setText(result.getBalance() + "©");
+            }
         }
     }
 }

@@ -12,6 +12,7 @@ public class Info {
     private double balance;
     private int user_type;
     private double coint_price;
+    private List<String> usernames;
 
     public List<InfoItem> getItems() {
         return items;
@@ -31,5 +32,9 @@ public class Info {
 
     public double getCoint_price() {
         return coint_price;
+    }
+
+    public List<String> getUsernames(){
+        return usernames;
     }
 }

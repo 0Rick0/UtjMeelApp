@@ -61,7 +61,10 @@ public class Communication {
     private Date expirationDate;
     private boolean loggedIn;
 
+    private Info cachedInfo = null;
+
     private String lastError;
+
     /**
      * try to load the info to a local file
      * @param context the context in which to load the file
@@ -151,6 +154,14 @@ public class Communication {
      */
     public String getLastError(){
         return lastError;
+    }
+
+    public String getUsername(){
+        return username;
+    }
+
+    public Info getCachedInfo(){
+        return cachedInfo;
     }
 
     /**
@@ -288,7 +299,8 @@ public class Communication {
             }
 
             Gson gson = new Gson();
-            return gson.fromJson(obj.toString(),Info.class);
+            cachedInfo = gson.fromJson(obj.toString(),Info.class);
+            return cachedInfo;
 
         } catch (JSONException e) {
             e.printStackTrace();

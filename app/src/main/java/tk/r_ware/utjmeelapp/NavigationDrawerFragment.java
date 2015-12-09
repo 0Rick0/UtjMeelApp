@@ -127,9 +127,10 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
 
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
+        //ActionBar actionBar = getActionBar();
+        //actionBar.setDisplayHomeAsUpEnabled(true);
+        //actionBar.setDisplayShowHomeEnabled(true);
+        //actionBar.setHomeButtonEnabled(true);
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the navigation drawer and the action bar app icon.
@@ -143,16 +144,19 @@ public class NavigationDrawerFragment extends Fragment {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
+
                 if (!isAdded()) {
                     return;
                 }
 
                 getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+
                 if (!isAdded()) {
                     return;
                 }
@@ -167,6 +171,7 @@ public class NavigationDrawerFragment extends Fragment {
                 }
 
                 getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+
             }
         };
 

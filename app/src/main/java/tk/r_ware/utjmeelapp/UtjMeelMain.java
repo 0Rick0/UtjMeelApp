@@ -3,6 +3,7 @@ package tk.r_ware.utjmeelapp;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -31,6 +32,7 @@ public class UtjMeelMain extends AppCompatActivity
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
+    private ActionBarDrawerToggle drawerToggle;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -84,10 +86,42 @@ public class UtjMeelMain extends AppCompatActivity
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
+        DrawerLayout layout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
+                layout);
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        drawerToggle = new ActionBarDrawerToggle(
+                this,
+                (DrawerLayout) findViewById(R.id.drawer_layout),
+                0,0
+        ){
+
+            public void onDrawerClosed(View view) {
+                drawerToggle.setDrawerIndicatorEnabled(false);
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                drawerToggle.setDrawerIndicatorEnabled(true);
+
+            }
+        };
+
+        layout.post(new Runnable() {
+            @Override
+            public void run() {
+                drawerToggle.syncState();
+            }
+        });
+
+        layout.setDrawerListener(drawerToggle);
+        drawerToggle.setDrawerIndicatorEnabled(false);
+
     }
 
     @Override
@@ -148,6 +182,7 @@ public class UtjMeelMain extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
             return true;
         }
 

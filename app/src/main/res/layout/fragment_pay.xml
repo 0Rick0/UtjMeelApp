@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="20 ©"
+            android:text="0 ©"
             android:id="@+id/tvCoins"
             android:textAlignment="center"
             android:textColor="#ffffff"
@@ -42,15 +42,15 @@
 
                 <Button
                     android:layout_width="wrap_content"
-                    android:text="New Button"
-                    android:id="@+id/button"
+                    android:text="Bier"
+                    android:id="@+id/btPay1"
                     android:layout_height="fill_parent"
                     android:layout_weight="1" />
 
                 <Button
                     android:layout_width="wrap_content"
-                    android:text="New Button"
-                    android:id="@+id/button2"
+                    android:text="Wijn"
+                    android:id="@+id/btPay2"
                     android:layout_height="fill_parent"
                     android:layout_weight="1" />
             </TableRow>
@@ -62,15 +62,15 @@
 
                 <Button
                     android:layout_width="wrap_content"
-                    android:text="New Button"
-                    android:id="@+id/button3"
+                    android:text="Cola"
+                    android:id="@+id/btPay3"
                     android:layout_height="fill_parent"
                     android:layout_weight="1" />
 
                 <Button
                     android:layout_width="wrap_content"
-                    android:text="New Button"
-                    android:id="@+id/button4"
+                    android:text="..."
+                    android:id="@+id/btPay4"
                     android:layout_height="fill_parent"
                     android:layout_weight="1" />
             </TableRow>

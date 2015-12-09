@@ -8,6 +8,12 @@
     <style name="UtjMeel" parent="Theme.AppCompat.NoActionBar" >
         <item name="android:windowBackground">@color/colorBackground</item>
         <item name="android:colorForeground">@color/foreground_material_dark</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+    </style>
+
+    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+        <item name="color">@android:color/white</item>
     </style>
 
 </resources>

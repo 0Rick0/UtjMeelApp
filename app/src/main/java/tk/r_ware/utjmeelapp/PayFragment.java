@@ -48,7 +48,7 @@ public class PayFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new infoRetriever().execute();
+
 
     }
 
@@ -59,11 +59,13 @@ public class PayFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_pay, container, false);
 
+        new infoRetriever(v).execute();
+
         Button b1 = (Button)v.findViewById(R.id.btPay1);
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getView().getContext(),Transfer.class);
+                Intent i = new Intent(v.getContext(),Transfer.class);
                 startActivity(i);
             }
         });
@@ -82,6 +84,12 @@ public class PayFragment extends Fragment {
 
     private class infoRetriever extends AsyncTask<Void,Void,Info>{
 
+        private View mView;
+
+        public infoRetriever(View view) {
+            mView = view;
+        }
+
         @Override
         protected Info doInBackground(Void... params) {
             return Communication.getInstance().info();
@@ -91,10 +99,10 @@ public class PayFragment extends Fragment {
         protected void onPostExecute(Info result){
             info = result;
             if(info == null){
-                ((TextView) getView().findViewById(R.id.tvCoins)).setText("Error");
-                Toast.makeText(getView().getContext(),Communication.getInstance().getLastError(),Toast.LENGTH_LONG).show();
+                ((TextView) mView.findViewById(R.id.tvCoins)).setText("Error");
+                Toast.makeText(mView.getContext(),Communication.getInstance().getLastError(),Toast.LENGTH_LONG).show();
             }else {
-                ((TextView) getView().findViewById(R.id.tvCoins)).setText(result.getBalance() + "©");
+                ((TextView) mView.findViewById(R.id.tvCoins)).setText(result.getBalance() + "©");
             }
         }
     }

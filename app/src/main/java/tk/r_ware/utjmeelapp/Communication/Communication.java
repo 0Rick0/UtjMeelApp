@@ -38,7 +38,7 @@ import tk.r_ware.utjmeelapp.Communication.containers.Transactions;
  * Created by Rick on 17-11-2015.
  */
 public class Communication {
-    private static final String WEB_ADDR = "http://192.168.0.106/UtjMeel/";
+    private static final String WEB_ADDR = "http://192.168.0.105/UtjMeel/";
     private static final String filename = "config.json";
 
     //singleton
@@ -419,7 +419,17 @@ public class Communication {
     private boolean transfer(Map<String,String> vars){
         vars.put("username",username);
         vars.put("session_id",token);
-        JSONObject obj = doPostRequest("transfer.php",vars);
+        StringBuilder vb = new StringBuilder();
+        int i = 0;
+        //build an query string
+        for(Map.Entry<String,String> kvp : vars.entrySet()){
+            vb.append(kvp.getKey()).append("=").append(kvp.getValue());
+            i++;
+            if(i!=vars.size()){
+                vb.append("&");
+            }
+        }
+        JSONObject obj = doGetRequest(WEB_ADDR + "transfer.php?"+vb.toString());
         try {
             if(obj.getInt("error")!=0){
                 lastError = obj.getString("error_text");

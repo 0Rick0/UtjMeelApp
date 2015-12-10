@@ -38,7 +38,7 @@ import tk.r_ware.utjmeelapp.Communication.containers.Transactions;
  * Created by Rick on 17-11-2015.
  */
 public class Communication {
-    private static final String WEB_ADDR = "http://192.168.0.105/UtjMeel/";
+    private static final String WEB_ADDR = "http://utjmeel.nl/API/V1.0/";
     private static final String filename = "config.json";
 
     //singleton
@@ -169,6 +169,9 @@ public class Communication {
      * @return true if the user is logged in
      */
     public boolean isLoggedIn(){
+        if(expirationDate == null){
+            return false;
+        }
         if(expirationDate.before(new Date())){//expiration date before now (now is after the expiration date)
             loggedIn = false;
         }

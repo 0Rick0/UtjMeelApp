@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
+
 import tk.r_ware.utjmeelapp.Communication.Communication;
 import tk.r_ware.utjmeelapp.Communication.containers.Info;
 
@@ -102,7 +104,7 @@ public class PayFragment extends Fragment {
                 ((TextView) mView.findViewById(R.id.tvCoins)).setText("Error");
                 Toast.makeText(mView.getContext(),Communication.getInstance().getLastError(),Toast.LENGTH_LONG).show();
             }else {
-                ((TextView) mView.findViewById(R.id.tvCoins)).setText(result.getBalance() + "©");
+                ((TextView) mView.findViewById(R.id.tvCoins)).setText(new DecimalFormat("#").format(result.getBalance()) + " ©");
             }
         }
     }

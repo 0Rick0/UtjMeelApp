@@ -2,8 +2,8 @@
 <resources>
     <color name="black">#000b31</color>
     <color name="colorPrimaryDark">#000b31</color>
-    <color name="colorBackground">#303030</color>
-    <color name="primary_material_dark">#001458</color>
+    <color name="colorBackground">#282828</color>
+    <color name="primary_material_dark">#0665b5</color>
     <color name="foreground_material_dark">#2c2c2c</color>
     <color name="accent_material_dark">#e1001765</color>
 </resources>

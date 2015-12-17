@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,12 @@ public class PayFragment extends Fragment {
 
     public PayFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        new infoRetriever(getView()).execute();
     }
 
     /**
@@ -63,11 +70,39 @@ public class PayFragment extends Fragment {
 
         new infoRetriever(v).execute();
 
-        Button b1 = (Button)v.findViewById(R.id.btPay1);
+        ImageButton b1 = (ImageButton)v.findViewById(R.id.btPay1);
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent i = new Intent(v.getContext(), Transfer.class);
+                i.putExtra("type", "Bier");
+                startActivity(i);
+            }
+        });
+        ImageButton b2 = (ImageButton)v.findViewById(R.id.btPay2);
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 Intent i = new Intent(v.getContext(),Transfer.class);
+                i.putExtra("type","Wijn");
+                startActivity(i);
+            }
+        });
+        Button b3 = (Button)v.findViewById(R.id.btPay3);
+        b3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(v.getContext(),Transfer.class);
+                i.putExtra("type","Fris");
+                startActivity(i);
+            }
+        });
+        Button b4 = (Button)v.findViewById(R.id.btPay4);
+        b4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(v.getContext(),Transfer.class);
+                i.putExtra("type","...");
                 startActivity(i);
             }
         });

@@ -1,6 +1,7 @@
 package tk.r_ware.utjmeelapp;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -9,10 +10,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import tk.r_ware.utjmeelapp.Communication.Communication;
 import tk.r_ware.utjmeelapp.Communication.containers.Transaction;
 import tk.r_ware.utjmeelapp.dummy.DummyContent;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -28,6 +34,10 @@ public class TransactionsFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+
+    private RecyclerView recyclerView;
+
+    private List<Transaction> mTransactions;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -58,19 +68,25 @@ public class TransactionsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        mTransactions = new ArrayList<>();
+
         View view = inflater.inflate(R.layout.fragment_transactions_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyTransactionRecyclerViewAdapter(DummyContent.ITEMS, mListener,context));
+            recyclerView.setAdapter(new MyTransactionRecyclerViewAdapter(mTransactions, mListener,context));
         }
+
+        LoadTransactionsTask task = new LoadTransactionsTask(getContext());
+        task.execute();
+
         return view;
     }
 
@@ -105,5 +121,43 @@ public class TransactionsFragment extends Fragment {
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(Transaction item);
+    }
+
+    public class LoadTransactionsTask extends AsyncTask<Void,Void,List<Transaction>> {
+
+        private Context context;
+
+        public LoadTransactionsTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected List<Transaction> doInBackground(Void... params) {
+
+            return Communication.getInstance().transactions().getTransactions();
+        }
+
+        @Override
+        protected void onPostExecute(final List<Transaction> transactions){
+            if(transactions == null){
+                Toast.makeText(context, "Failed to load transactions!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, Communication.getInstance().getLastError(), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            mTransactions.addAll(transactions);
+
+            Collections.sort(mTransactions, new Comparator<Transaction>() {
+                @Override
+                public int compare(Transaction o1, Transaction o2) {
+                    return o2.getDate().compareTo(o1.getDate());
+                }
+            });
+
+            recyclerView.getAdapter().notifyDataSetChanged();
+            //recyclerView.setAdapter(new MyTransactionRecyclerViewAdapter(DummyContent.ITEMS, mListener,context));
+        }
+
+
     }
 }

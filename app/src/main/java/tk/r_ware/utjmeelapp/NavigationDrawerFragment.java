@@ -1,5 +1,6 @@
 package tk.r_ware.utjmeelapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
@@ -21,6 +22,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import tk.r_ware.utjmeelapp.Communication.Communication;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -246,17 +249,17 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.action_logout:
+                Communication.getInstance().logOut(mDrawerLayout.getContext());
+                Intent i = new Intent(mDrawerLayout.getContext(),Login.class);
+                startActivity(i);
+                //finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        if (item.getItemId() == R.id.action_example) {
-            Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     /**

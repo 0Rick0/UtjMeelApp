@@ -88,6 +88,16 @@ public class Transfer extends AppCompatActivity {
                 break;
             }
         }
+        String type = getIntent().getStringExtra("type");
+        if(type!=null){
+            for (int i=0; i<items.size();i++){
+                if(items.get(i).getName().equalsIgnoreCase(type)){//try to find item
+                    sItem.setSelection(i);//select item as default item
+                    break;
+                }
+            }
+        }
+
         if(Communication.getInstance().getCachedInfo().getUser_type()>2){
             sFrom.setEnabled(false);//if normal user don't allow changing this
 

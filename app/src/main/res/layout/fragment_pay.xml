@@ -40,19 +40,25 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1">
 
-                <Button
+                <ImageButton
                     android:layout_width="wrap_content"
                     android:text="Bier"
                     android:id="@+id/btPay1"
                     android:layout_height="fill_parent"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:src="@mipmap/icon_bier"
+                    android:scaleType="fitCenter"
+                    android:background="@null"/>
 
-                <Button
+                <ImageButton
                     android:layout_width="wrap_content"
                     android:text="Wijn"
                     android:id="@+id/btPay2"
                     android:layout_height="fill_parent"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:src="@mipmap/icon_wijn"
+                    android:scaleType="fitCenter"
+                    android:background="@null"/>
             </TableRow>
 
             <TableRow
@@ -62,7 +68,7 @@
 
                 <Button
                     android:layout_width="wrap_content"
-                    android:text="Cola"
+                    android:text="Fris"
                     android:id="@+id/btPay3"
                     android:layout_height="fill_parent"
                     android:layout_weight="1" />

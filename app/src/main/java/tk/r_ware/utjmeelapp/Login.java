@@ -88,6 +88,15 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
             }
         });
 
+        Button createAccountButton = (Button) findViewById(R.id.create_account);
+        createAccountButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Login.this,CreateAccount.class);
+                startActivity(i);
+            }
+        });
+
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
@@ -320,6 +329,7 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
                 Communication.getInstance().trySaveInfo(getApplicationContext());
                 Intent i = new Intent(Login.this,UtjMeelMain.class);
                 startActivity(i);
+                finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,6 +23,7 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -126,7 +128,11 @@ public class Communication {
             obj.put("loggedIn", loggedIn);
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd",Locale.US);
 
-            obj.put("expirationDate", format.format(expirationDate));
+            if(expirationDate == null){
+                obj.put("expirationDate", "err");
+            }else{
+                obj.put("expirationDate", format.format(expirationDate));
+            }
         } catch (JSONException e) {
             e.printStackTrace();
             return false;
@@ -211,6 +217,17 @@ public class Communication {
         }
 
         return true;
+    }
+
+
+
+    public void logOut(Context context) {
+        this.username = null;
+        this.token = null;
+        this.expirationDate = null;
+        this.cachedInfo = null;
+        this.loggedIn = false;
+        trySaveInfo(context);
     }
 
     /**
@@ -374,7 +391,9 @@ public class Communication {
                 lastError = obj.getString("error_text");
                 return null;
             }
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder()
+                .setDateFormat("dd-MM-yyyy HH:mm:ss")
+                .create();
             return gson.fromJson(obj.toString(), Transactions.class);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -426,7 +445,11 @@ public class Communication {
         int i = 0;
         //build an query string
         for(Map.Entry<String,String> kvp : vars.entrySet()){
-            vb.append(kvp.getKey()).append("=").append(kvp.getValue());
+            try {
+                vb.append(kvp.getKey()).append("=").append(URLEncoder.encode(kvp.getValue(),"UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             i++;
             if(i!=vars.size()){
                 vb.append("&");

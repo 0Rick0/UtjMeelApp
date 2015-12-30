@@ -402,7 +402,7 @@ public class Communication {
         }
     }
 
-    public boolean transfer(String itemName, int amount, String description){
+    public boolean transfer(String itemName, double amount, String description){
         Map<String,String> vars = new HashMap<>();
         vars.put("amount", amount + "");
         vars.put("itemName", itemName);
@@ -410,7 +410,7 @@ public class Communication {
         return transfer(vars);
     }
 
-    public boolean transfer(String itemName, int amount,String sourceName, String description){
+    public boolean transfer(String itemName, double amount,String sourceName, String description){
         Map<String,String> vars = new HashMap<>();
         vars.put("amount", amount + "");
         vars.put("itemName", itemName);
@@ -419,7 +419,7 @@ public class Communication {
         return transfer(vars);
     }
 
-    public boolean transferT(String itemName, int amount,String targetName, String description){
+    public boolean transferT(String itemName, double amount,String targetName, String description){
         Map<String,String> vars = new HashMap<>();
         vars.put("amount", amount + "");
         vars.put("itemName", itemName);
@@ -428,7 +428,7 @@ public class Communication {
         return transfer(vars);
     }
 
-    public boolean transfer(String itemName, int amount,String sourceName,String targetName, String description){
+    public boolean transfer(String itemName, double amount,String sourceName,String targetName, String description){
         Map<String,String> vars = new HashMap<>();
         vars.put("amount", amount + "");
         vars.put("itemName", itemName);

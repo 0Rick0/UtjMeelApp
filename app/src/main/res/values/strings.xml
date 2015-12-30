@@ -3,6 +3,7 @@
 
     <string name="title_main">Betalen</string>
     <string name="title_transactions">Transacties</string>
+    <string name="title_coins">Munten Kopen</string>
 
     <string name="navigation_drawer_open">Open menu</string>
     <string name="navigation_drawer_close">Sluit menur</string>

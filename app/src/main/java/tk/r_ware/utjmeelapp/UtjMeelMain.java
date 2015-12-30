@@ -39,6 +39,10 @@ public class UtjMeelMain extends AppCompatActivity
      */
     private CharSequence mTitle;
 
+    public void addAddCoins(){
+        mNavigationDrawerFragment.addCoins();
+    }
+
     private void checkLogin(){
         Boolean load = Communication.getInstance().tryLoadInfo(getApplicationContext());
         Boolean login = Communication.getInstance().isLoggedIn();
@@ -147,6 +151,13 @@ public class UtjMeelMain extends AppCompatActivity
 
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, TransactionsFragment.newInstance(1))
+                        .commit();
+                break;
+            case 3:
+                mTitle = getString(R.string.title_coins);
+
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, BuyCoinsFragment.newInstance())
                         .commit();
                 break;
         }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import tk.r_ware.utjmeelapp.Communication.Communication;
 import tk.r_ware.utjmeelapp.Communication.containers.Transaction;
 import tk.r_ware.utjmeelapp.TransactionsFragment.OnListFragmentInteractionListener;
 
@@ -45,7 +46,11 @@ public class MyTransactionRecyclerViewAdapter extends RecyclerView.Adapter<MyTra
         Transaction item = mValues.get(position);
 
         holder.mItem = item;
-        holder.mShortView.setText(String.format(context.getString(R.string.transaction_short_text_from),item.getItemCount(),item.getItemName(),item.getSourceName()));
+        if(Communication.getInstance().getUsername().equalsIgnoreCase(item.getSourceName())) {
+            holder.mShortView.setText(String.format(context.getString(R.string.transaction_short_text_to), item.getItemCount(), item.getItemName(), item.getTargetName()));
+        }else{
+            holder.mShortView.setText(String.format(context.getString(R.string.transaction_short_text_from), item.getItemCount(), item.getItemName(), item.getSourceName()));
+        }
         holder.mDescriptionView.setText(String.format(context.getString(R.string.transaction_description_text),format.format(item.getDate()),item.getDescription()));
         holder.mPriceView.setText(String.format(context.getString(R.string.transaction_price_text),item.getAmount()));
 

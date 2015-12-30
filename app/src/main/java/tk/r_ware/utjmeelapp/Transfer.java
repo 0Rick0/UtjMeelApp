@@ -62,15 +62,15 @@ public class Transfer extends AppCompatActivity {
             return;
         }
         items = info.getItems();
-        ArrayAdapter<CharSequence> Aitems = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        ArrayAdapter<CharSequence> Aitems = new ArrayAdapter<>(this, R.layout.white_spinner_item);
         for(InfoItem item : items){
             Aitems.add(item.getName());
         }
-        Aitems.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Aitems.setDropDownViewResource(R.layout.white_spinner_item);
         sItem.setAdapter(Aitems);
 
         usernames = Communication.getInstance().getCachedInfo().getUsernames();
-        ArrayAdapter<CharSequence> Ausernames = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1);
+        ArrayAdapter<CharSequence> Ausernames = new ArrayAdapter<>(this,R.layout.white_spinner_item);
         for (String s : usernames){
             Ausernames.add(s);
         }

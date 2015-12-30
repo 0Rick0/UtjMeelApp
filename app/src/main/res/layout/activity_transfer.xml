@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     tools:context="tk.r_ware.utjmeelapp.Transfer"
     android:measureWithLargestChild="false"
-    android:nestedScrollingEnabled="false">
+    android:nestedScrollingEnabled="false"
+    android:background="@color/colorBackground">
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -18,12 +19,14 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Van"
-            android:id="@+id/tvFrom" />
+            android:id="@+id/tvFrom"
+            android:textColor="#ffffff"/>
 
         <Spinner
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/spFrom" />
+            android:id="@+id/spFrom"
+            android:popupBackground="@color/colorPrimaryDark" />
 
     </LinearLayout>
 
@@ -37,13 +40,14 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Naar"
-            android:id="@+id/tvTo" />
+            android:id="@+id/tvTo"
+            android:textColor="#ffffff" />
 
         <Spinner
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/spTo"
-            android:spinnerMode="dropdown" />
+            android:popupBackground="@color/colorPrimaryDark" />
 
     </LinearLayout>
 
@@ -58,12 +62,14 @@
             android:inputType="numberSigned"
             android:ems="10"
             android:id="@+id/etAmount"
-            android:text="1" />
+            android:text="1"
+            android:textColor="#ffffff"/>
 
         <Spinner
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/sItem" />
+            android:id="@+id/sItem"
+            android:popupBackground="@color/colorPrimaryDark" />
 
 
     </LinearLayout>

@@ -23,6 +23,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import tk.r_ware.utjmeelapp.Communication.Communication;
 
 /**
@@ -61,7 +63,18 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
 
+    private ArrayAdapter<String> adapter;
+    private boolean addCoinsAdded = false;
+
     public NavigationDrawerFragment() {
+    }
+
+    public void addCoins(){
+        if(addCoinsAdded)return;
+        addCoinsAdded = true;
+
+        adapter.add(getString(R.string.title_coins));
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -100,14 +113,19 @@ public class NavigationDrawerFragment extends Fragment {
                 selectItem(position);
             }
         });
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
+
+        ArrayList<String> items = new ArrayList<>();
+        items.add(getString(R.string.title_main));
+        items.add(getString(R.string.title_transactions));
+
+        adapter = new ArrayAdapter<>(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
-                new String[]{
-                        getString(R.string.title_main),
-                        getString(R.string.title_transactions),
-                }));
+                items);
+
+
+        mDrawerListView.setAdapter(adapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
     }

@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 import tk.r_ware.utjmeelapp.Communication.Communication;
@@ -88,7 +89,7 @@ public class PayFragment extends Fragment {
                 startActivity(i);
             }
         });
-        Button b3 = (Button)v.findViewById(R.id.btPay3);
+        ImageButton b3 = (ImageButton)v.findViewById(R.id.btPay3);
         b3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +98,7 @@ public class PayFragment extends Fragment {
                 startActivity(i);
             }
         });
-        Button b4 = (Button)v.findViewById(R.id.btPay4);
+        ImageButton b4 = (ImageButton)v.findViewById(R.id.btPay4);
         b4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,7 +140,10 @@ public class PayFragment extends Fragment {
                 ((TextView) mView.findViewById(R.id.tvCoins)).setText("Error");
                 Toast.makeText(mView.getContext(),Communication.getInstance().getLastError(),Toast.LENGTH_LONG).show();
             }else {
-                ((TextView) mView.findViewById(R.id.tvCoins)).setText(new DecimalFormat("#").format(result.getBalance()) + " ©");
+                DecimalFormat format = new DecimalFormat("#");
+                format.setRoundingMode(RoundingMode.DOWN);
+                ((TextView) mView.findViewById(R.id.tvCoins)).setText(format.format(result.getBalance()) + " ©");
+                if(info.getUser_type()<3)((UtjMeelMain)getActivity()).addAddCoins();
             }
         }
     }

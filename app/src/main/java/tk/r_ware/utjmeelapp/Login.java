@@ -198,7 +198,7 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
     }
 
     private boolean isEmailValid(String user) {
-        return user.length()>3;
+        return user.length()>=3;
     }
 
     private boolean isPasswordValid(String password) {

@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -142,7 +143,8 @@ public class PayFragment extends Fragment {
             }else {
                 DecimalFormat format = new DecimalFormat("#");
                 format.setRoundingMode(RoundingMode.DOWN);
-                ((TextView) mView.findViewById(R.id.tvCoins)).setText(format.format(result.getBalance()) + " ©");
+                TextView tvCoins = (TextView) mView.findViewById(R.id.tvCoins);
+                tvCoins.setText(Html.fromHtml(format.format(result.getBalance()) + " <img src=\"icon_coin.png\"\\>",new ImageGetter(mView.getContext(),tvCoins.getLineHeight()),null));
                 if(info.getUser_type()<3)((UtjMeelMain)getActivity()).addAddCoins();
             }
         }

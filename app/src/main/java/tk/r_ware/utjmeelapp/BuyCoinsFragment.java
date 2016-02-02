@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,9 @@ public class BuyCoinsFragment extends Fragment {
     private TextView tvTotal;
     private EditText etAmount;
     private Button btAddCoins;
+
+    private ImageGetter imageGetter;
+    private boolean firsttime = true;
 
 
     public BuyCoinsFragment() {
@@ -85,10 +89,15 @@ public class BuyCoinsFragment extends Fragment {
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            public synchronized void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
+                    if(firsttime){
+                        imageGetter.setHeight(tvTotal.getHeight());
+                        firsttime = false;
+                    }
                     Double iAmount = Double.valueOf(s.toString());
-                    tvTotal.setText(" / " + info.getPrice() + " = " + new DecimalFormat("#.00").format(iAmount / info.getPrice()) + " ©");
+                    tvTotal.setText(Html.fromHtml(String.format(getContext().getString(R.string.buy_coins_text), info.getPrice(),new DecimalFormat("#.00").format(iAmount / info.getPrice())),imageGetter,null));
+
                     vallidInput = true;
                 } catch (NumberFormatException ex) {
                     vallidInput = false;
@@ -126,7 +135,9 @@ public class BuyCoinsFragment extends Fragment {
 
         sTarget.setAdapter(Ausernames);
 
-        tvTotal.setText(" / " + info.getPrice() + " = 0 ©");
+        imageGetter = new ImageGetter(getContext(),tvTotal.getHeight());
+
+        tvTotal.setText(Html.fromHtml(String.format(getContext().getString(R.string.buy_coins_text), info.getPrice(),"0"),imageGetter,null));
 
         return v;
     }

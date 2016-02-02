@@ -3,6 +3,8 @@ package tk.r_ware.utjmeelapp;
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,10 +30,13 @@ public class MyTransactionRecyclerViewAdapter extends RecyclerView.Adapter<MyTra
     private static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US);
     private final Context context;
 
+    private final ImageGetter imageGetter;
+
     public MyTransactionRecyclerViewAdapter(List<Transaction> items, OnListFragmentInteractionListener listener, Context context) {
         mValues = items;
         mListener = listener;
         this.context = context;
+        imageGetter = new ImageGetter(context,66);
     }
 
     @Override
@@ -52,7 +57,9 @@ public class MyTransactionRecyclerViewAdapter extends RecyclerView.Adapter<MyTra
             holder.mShortView.setText(String.format(context.getString(R.string.transaction_short_text_from), item.getItemCount(), item.getItemName(), item.getSourceName()));
         }
         holder.mDescriptionView.setText(String.format(context.getString(R.string.transaction_description_text),format.format(item.getDate()),item.getDescription()));
-        holder.mPriceView.setText(String.format(context.getString(R.string.transaction_price_text),item.getAmount()));
+        //Log.d("price", "onBindViewHolder: creating text for transactions " + context.getString(R.string.transaction_price_text));
+        //imageGetter.setHeight(holder.mPriceView.getHeight());
+        holder.mPriceView.setText(Html.fromHtml(String.format(context.getString(R.string.transaction_price_text), item.getAmount()),imageGetter,null));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

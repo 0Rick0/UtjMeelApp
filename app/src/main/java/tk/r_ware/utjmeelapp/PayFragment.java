@@ -144,7 +144,7 @@ public class PayFragment extends Fragment {
                 DecimalFormat format = new DecimalFormat("#");
                 format.setRoundingMode(RoundingMode.DOWN);
                 TextView tvCoins = (TextView) mView.findViewById(R.id.tvCoins);
-                tvCoins.setText(Html.fromHtml(format.format(result.getBalance()) + " <img src=\"icon_coin.png\"\\>",new ImageGetter(mView.getContext(),tvCoins.getLineHeight()),null));
+                tvCoins.setText(Html.fromHtml(format.format(result.getBalance()) + " <img src=\"icon_coin.png\"\\>",new ImageGetter(mView.getContext(),utils.dpToPx(100)),null));
                 if(info.getUser_type()<3)((UtjMeelMain)getActivity()).addAddCoins();
             }
         }

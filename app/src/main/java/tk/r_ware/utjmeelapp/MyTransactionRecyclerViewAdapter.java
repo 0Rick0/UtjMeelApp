@@ -36,7 +36,7 @@ public class MyTransactionRecyclerViewAdapter extends RecyclerView.Adapter<MyTra
         mValues = items;
         mListener = listener;
         this.context = context;
-        imageGetter = new ImageGetter(context,66);
+        imageGetter = new ImageGetter(context,utils.dpToPx(14));
     }
 
     @Override
@@ -57,8 +57,6 @@ public class MyTransactionRecyclerViewAdapter extends RecyclerView.Adapter<MyTra
             holder.mShortView.setText(String.format(context.getString(R.string.transaction_short_text_from), item.getItemCount(), item.getItemName(), item.getSourceName()));
         }
         holder.mDescriptionView.setText(String.format(context.getString(R.string.transaction_description_text),format.format(item.getDate()),item.getDescription()));
-        //Log.d("price", "onBindViewHolder: creating text for transactions " + context.getString(R.string.transaction_price_text));
-        //imageGetter.setHeight(holder.mPriceView.getHeight());
         holder.mPriceView.setText(Html.fromHtml(String.format(context.getString(R.string.transaction_price_text), item.getAmount()),imageGetter,null));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {

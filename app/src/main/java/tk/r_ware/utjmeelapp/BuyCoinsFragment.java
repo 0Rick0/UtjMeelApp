@@ -91,10 +91,6 @@ public class BuyCoinsFragment extends Fragment {
             @Override
             public synchronized void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
-                    if(firsttime){
-                        imageGetter.setHeight(tvTotal.getHeight());
-                        firsttime = false;
-                    }
                     Double iAmount = Double.valueOf(s.toString());
                     tvTotal.setText(Html.fromHtml(String.format(getContext().getString(R.string.buy_coins_text), info.getPrice(),new DecimalFormat("#.00").format(iAmount / info.getPrice())),imageGetter,null));
 
@@ -135,7 +131,7 @@ public class BuyCoinsFragment extends Fragment {
 
         sTarget.setAdapter(Ausernames);
 
-        imageGetter = new ImageGetter(getContext(),tvTotal.getHeight());
+        imageGetter = new ImageGetter(getContext(),utils.dpToPx(22));
 
         tvTotal.setText(Html.fromHtml(String.format(getContext().getString(R.string.buy_coins_text), info.getPrice(),"0"),imageGetter,null));
 

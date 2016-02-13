@@ -1,6 +1,8 @@
 package tk.r_ware.utjmeelapp;
 
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -81,6 +83,8 @@ public class BuyCoinsFragment extends Fragment {
         tvTotal = (TextView)v.findViewById(R.id.tvTotal);
         etAmount = (EditText)v.findViewById(R.id.etAmount);
         btAddCoins = (Button)v.findViewById(R.id.btAddCoins);
+
+        sTarget.getBackground().setColorFilter(Color.rgb(255, 255, 255), PorterDuff.Mode.SRC_ATOP);
 
         etAmount.addTextChangedListener(new TextWatcher() {
             @Override

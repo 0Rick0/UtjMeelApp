@@ -3,6 +3,8 @@ package tk.r_ware.utjmeelapp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -55,6 +57,10 @@ public class Transfer extends AppCompatActivity {
         sItem = (Spinner)findViewById(R.id.sItem);
         sTo = (Spinner)findViewById(R.id.spTo);
         sFrom = (Spinner)findViewById(R.id.spFrom);
+
+        sFrom.getBackground().setColorFilter(Color.rgb(255,255,255), PorterDuff.Mode.SRC_ATOP);
+        sTo.getBackground().setColorFilter(Color.rgb(255, 255, 255), PorterDuff.Mode.SRC_ATOP);
+        sItem.getBackground().setColorFilter(Color.rgb(255, 255, 255), PorterDuff.Mode.SRC_ATOP);
 
         Info info = Communication.getInstance().getCachedInfo();
         if(info == null){
